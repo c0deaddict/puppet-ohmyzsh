@@ -28,9 +28,9 @@
 # Copyright 2015 Jos van Bakel
 #
 define ohmyzsh::install(
-  $plugins,
-  $aliases,
-  $warps
+  $plugins = undef,
+  $aliases = [],
+  $warps = []
 ) {
   if $name == 'root' {
     $home = '/root'
