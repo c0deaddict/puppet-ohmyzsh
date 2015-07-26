@@ -20,10 +20,12 @@
 # === Authors
 #
 # Leon Brocard <acme@astray.com>
+# Jos van Bakel <josvanbakel@gmail.com>
 #
 # === Copyright
 #
 # Copyright 2013 Leon Brocard
+# Copyright 2015 Jos van Bakel
 #
 define ohmyzsh::install() {
   if $name == 'root' { $home = '/root' } else { $home = "${ohmyzsh::params::home}/${name}" }
@@ -53,5 +55,18 @@ define ohmyzsh::install() {
     User <| title == $name |> {
       shell => $ohmyzsh::params::zsh
     }
+  }
+
+  file { "$home/.zshrc.d":
+    owner => $name,
+    group => $name,
+    mode => '0755',
+    ensure => directory,
+  }
+
+  file_line { "$name-source-zshrc.d":
+    path => "$home/.zshrc",
+    line => "source ~/.zshrc.d",
+    require => File["$home/.zshrc.d"],
   }
 }
