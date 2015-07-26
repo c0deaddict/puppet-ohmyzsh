@@ -1,4 +1,4 @@
-define ohmyzsh::plugins(
+define ohmyzsh::plugins::install(
   $plugins = 'git',
   $user = $name
 ) {
