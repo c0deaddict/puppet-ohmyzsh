@@ -84,4 +84,10 @@ define ohmyzsh::install(
       plugins => $plugins,
     }
   }
+
+  if $aliases {
+    create_resources('ohmyzsh::alias', $aliases, {
+      user => $name,
+    })
+  }
 }
