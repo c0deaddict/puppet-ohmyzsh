@@ -1,5 +1,5 @@
 define ohmyzsh::alias(
-  $alias,
+  $key,
   $command,
   $user = $name
 ) {
@@ -11,8 +11,8 @@ define ohmyzsh::alias(
   
   file_line { "$home/.zshrc.d/aliases":
     path => "$home/.zshrc.d/aliases",
-    line => "alias $alias='$command'",
-    match => "^alias $alias=",
+    line => "alias $key='$command'",
+    match => "^alias $key=",
     require => Ohmyzsh::Install[$user],
   }
 }
