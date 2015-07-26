@@ -12,7 +12,7 @@ define ohmyzsh::theme(
     file { "$home/.oh-my-zsh/custom/themes/codeaddict.zsh-theme":
       ensure => present,
       owner => $user,
-      source => 'puppet:///ohmyzsh/codeaddict.zsh-theme',
+      source => 'puppet:///modules/ohmyzsh/codeaddict.zsh-theme',
     }
   }
 
