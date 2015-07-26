@@ -8,7 +8,7 @@ define ohmyzsh::alias(
     $home = "${ohmyzsh::params::home}/${user}"
   }
 
-  if not defined(File["$home/.zshrc.d/aliases"]) {
+  if !defined(File["$home/.zshrc.d/aliases"]) {
     file { "$home/.zshrc.d/aliases":
       ensure => present,
       owner => $user,
