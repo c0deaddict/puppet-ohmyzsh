@@ -1,7 +1,6 @@
 define ohmyzsh::alias(
-  $key,
   $command,
-  $user = $name
+  $user
 ) {
   if $user == 'root' {
     $home = '/root'
@@ -15,10 +14,10 @@ define ohmyzsh::alias(
     require => File["$home/.zshrc.d"],
   }
   
-  file_line { "$home/.zshrc.d/aliases":
+  file_line { "$user ohmyzsh alias $name":
     path => "$home/.zshrc.d/aliases",
-    line => "alias $key='$command'",
-    match => "^alias $key=",
+    line => "alias $name='$command'",
+    match => "^alias $name=",
     require => [Ohmyzsh::Install[$user], File["$home/.zshrc.d/aliases"]]
   }
 }
