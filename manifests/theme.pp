@@ -9,10 +9,16 @@ define ohmyzsh::theme(
   }
 
   if $theme == 'codeaddict' {
+    file { "$home/.oh-my-zsh/custom/themes":
+      ensure => directory,
+      owner => $user,
+    }
+
     file { "$home/.oh-my-zsh/custom/themes/codeaddict.zsh-theme":
       ensure => present,
       owner => $user,
       source => 'puppet:///modules/ohmyzsh/codeaddict.zsh-theme',
+      require => File["$home/.oh-my-zsh/custom/themes"],
     }
   }
 
