@@ -1,9 +1,13 @@
 define ohmyzsh::alias(
+  $alias,
   $command,
-  $user,
-  $alias = $name
+  $user = $name
 ) {
-  if $user == 'root' { $home = '/root' } else { $home = "${ohmyzsh::params::home}/${user}" }
+  if $user == 'root' {
+    $home = '/root'
+  } else {
+    $home = "${ohmyzsh::params::home}/${user}"
+  }
   
   file_line { "$home/.zshrc.d/aliases":
     path => "$home/.zshrc.d/aliases",
