@@ -20,6 +20,6 @@ define ohmyzsh::alias(
     path => "$home/.zshrc.d/aliases",
     line => "alias $name='$command'",
     match => "^alias $name=",
-    require => [Ohmyzsh::Install[$user], File["$home/.zshrc.d/aliases"]]
+    require => [File["$home/.zshrc.d/aliases"]]
   }
 }
