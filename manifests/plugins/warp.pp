@@ -19,7 +19,7 @@ define ohmyzsh::plugins::warp(
   file_line { "$user zsh warp $name":
     path => "$home/.warprc",
     line => "$name:$dir",
-    match => "^$name\:",
+    match => "^${name}:",
     ensure => $ensure,
     require => File["$home/.warprc"],
   }
