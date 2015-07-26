@@ -27,8 +27,17 @@
 # Copyright 2013 Leon Brocard
 # Copyright 2015 Jos van Bakel
 #
-define ohmyzsh::install() {
-  if $name == 'root' { $home = '/root' } else { $home = "${ohmyzsh::params::home}/${name}" }
+define ohmyzsh::install(
+  $plugins,
+  $aliases,
+  $warps
+) {
+  if $name == 'root' {
+    $home = '/root'
+  } else {
+    $home = "${ohmyzsh::params::home}/${name}"
+  }
+
   exec { "ohmyzsh::git clone ${name}":
     creates => "${home}/.oh-my-zsh",
     command => "/usr/bin/git clone git://github.com/robbyrussell/oh-my-zsh.git ${home}/.oh-my-zsh",
@@ -68,5 +77,11 @@ define ohmyzsh::install() {
     path => "$home/.zshrc",
     line => "source ~/.zshrc.d",
     require => File["$home/.zshrc.d"],
+  }
+
+  if $plugins {
+    ohmyzsh::plugins::install { $name:
+      plugins => $plugins,
+    }
   }
 }
