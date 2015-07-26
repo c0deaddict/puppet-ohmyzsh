@@ -8,10 +8,12 @@ define ohmyzsh::alias(
     $home = "${ohmyzsh::params::home}/${user}"
   }
 
-  file { "$home/.zshrc.d/aliases":
-    ensure => present,
-    owner => $user,
-    require => File["$home/.zshrc.d"],
+  if not defined(File["$home/.zshrc.d/aliases"]) {
+    file { "$home/.zshrc.d/aliases":
+      ensure => present,
+      owner => $user,
+      require => File["$home/.zshrc.d"],
+    }
   }
   
   file_line { "$user ohmyzsh alias $name":
