@@ -8,11 +8,17 @@ define ohmyzsh::alias(
   } else {
     $home = "${ohmyzsh::params::home}/${user}"
   }
+
+  file { "$home/.zshrc.d/aliases":
+    ensure => present,
+    owner => $user,
+    require => File["$home/.zshrc.d"],
+  }
   
   file_line { "$home/.zshrc.d/aliases":
     path => "$home/.zshrc.d/aliases",
     line => "alias $key='$command'",
     match => "^alias $key=",
-    require => [Ohmyzsh::Install[$user], File["$home/.zshrc.d"]]
+    require => [Ohmyzsh::Install[$user], File["$home/.zshrc.d/aliases"]]
   }
 }
