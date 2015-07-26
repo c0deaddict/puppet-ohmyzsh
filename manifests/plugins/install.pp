@@ -8,6 +8,7 @@ define ohmyzsh::plugins::install(
       path    => "${home}/.zshrc",
       line    => "plugins=(${plugins})",
       match   => '^plugins=',
+      require => Ohmyzsh::Install[$user],
     }
   }
 }
