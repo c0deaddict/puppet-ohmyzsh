@@ -1,0 +1,19 @@
+{
+  "name": "c0deaddict-ohmyzsh",
+  "version": "0.1.4",
+  "author": "acme, c0deaddict",
+  "license": "Apache-2.0",
+  "summary": "ohmyzsh module",
+  "source": "https://github.com/c0deaddict/puppet-acme-oh-my-zsh",
+  "project_page": "https://github.com/c0deaddict/puppet-acme-oh-my-zsh",
+  "tags": ["zsh"],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [ "12.04", "10.04" ]
+    }
+  ],
+  "dependencies": [
+    { "name": "puppetlabs/stdlib", "version_requirement": ">=3.2.0 <5.0.0" }
+  ]
+}
