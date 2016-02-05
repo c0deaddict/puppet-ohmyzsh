@@ -32,6 +32,8 @@ define ohmyzsh::install(
   $home,
 ) {
 
+  notify { "ohmyzsh::install is being installed on $user": }
+
   include ohmyzsh
 
   exec { "ohmyzsh::git clone ${user}":

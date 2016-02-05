@@ -15,7 +15,7 @@ define ohmyzsh::theme(
     }
   }
 
-  file_line { "${user}-${theme}-install":
+  file_line { "${user}-zsh-theme-${theme}":
     path    => "${home}/.zshrc",
     line    => "ZSH_THEME=\"${theme}\"",
     match   => '^ZSH_THEME',

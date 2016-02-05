@@ -4,14 +4,14 @@ define ohmyzsh::warps(
   $map  = {},
 ) {
 
-  $map.each |$alias, $target| {
+  $map.each |$warp, $target| {
     create_resources('ohmyzsh::warp', {
-      "${user}-${alias}" => {
-        alias   => $alias,
-        target  => $target,
-        user    => $user,
-        home    => $home,
-        require => Ohmyzsh::Install[$user],
+      "${user}-${warp}" => {
+        resource_name => $warp,
+        target        => $target,
+        user          => $user,
+        home          => $home,
+        require       => Ohmyzsh::Install[$user],
       }
     })
   }

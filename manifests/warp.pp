@@ -1,10 +1,9 @@
 define ohmyzsh::warp(
   $ensure         = present,
-  $alias          = $resource_name,
   $target,
   $user,
   $home,
-  $resource_name  = undef,
+  $resource_name,
 ) {
 
   $warprc = "${home}/.warprc"
@@ -16,11 +15,11 @@ define ohmyzsh::warp(
   }
 
   $expanded_target = regsubst($target, '^~', $home)
-  file_line { "${user}-zsh-warp-${alias}":
+  file_line { "${user}-zsh-warp-${resource_name}":
     ensure  => $ensure,
     path    => $warprc,
-    line    => "${alias}:${expanded_target}",
-    match   => "^${alias}\:",
+    line    => "${resource_name}:${expanded_target}",
+    match   => "^${resource_name}\\:",
     require => File[$warprc],
   }
 

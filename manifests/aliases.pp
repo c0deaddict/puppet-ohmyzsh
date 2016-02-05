@@ -4,13 +4,13 @@ define ohmyzsh::aliases(
   $map  = {},
 ) {
 
-  $map.each |$alias, $command| {
+  $map.each |$real_alias, $command| {
     create_resources('ohmyzsh::alias', {
-      "${user}-${alias}" => {
-        alias   => $alias,
-        command => $command,
-        user    => $user,
-        home    => $home,
+      "${user}-${real_alias}" => {
+        resource_name => $real_alias,
+        command       => $command,
+        user          => $user,
+        home          => $home,
       }
     })
   }
