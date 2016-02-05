@@ -32,6 +32,8 @@ define ohmyzsh::install(
   $home,
 ) {
 
+  include ohmyzsh
+
   exec { "ohmyzsh::git clone ${name}":
     creates => "${home}/.oh-my-zsh",
     command => "/usr/bin/git clone git://github.com/robbyrussell/oh-my-zsh.git ${home}/.oh-my-zsh",
