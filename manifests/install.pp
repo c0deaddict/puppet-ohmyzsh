@@ -27,25 +27,21 @@
 # Copyright 2013 Leon Brocard
 # Copyright 2015 Jos van Bakel
 #
-define ohmyzsh::install() {
-  if $name == 'root' {
-    $home = '/root'
-  } else {
-    $home = "${ohmyzsh::params::home}/${name}"
-  }
+define ohmyzsh::install(
+  $user = $name,
+  $home,
+) {
 
   exec { "ohmyzsh::git clone ${name}":
     creates => "${home}/.oh-my-zsh",
     command => "/usr/bin/git clone git://github.com/robbyrussell/oh-my-zsh.git ${home}/.oh-my-zsh",
-    user    => $name,
+    user    => $user,
     require => [Package['git'], Package['zsh']]
-  }
-
+  } ->
   exec { "ohmyzsh::cp .zshrc ${name}":
     creates => "${home}/.zshrc",
     command => "/bin/cp ${home}/.oh-my-zsh/templates/zshrc.zsh-template ${home}/.zshrc",
     user    => $name,
-    require => Exec["ohmyzsh::git clone ${name}"],
   }
 
   if ! defined(User[$name]) {
@@ -63,15 +59,13 @@ define ohmyzsh::install() {
   }
 
   file { "$home/.zshrc.d":
-    owner => $name,
-    group => $name,
-    mode => '0755',
+    owner  => $name,
+    group  => $name,
+    mode   => '0755',
     ensure => directory,
-  }
-
+  } ->
   file_line { "$name-source-zshrc.d":
-    path => "$home/.zshrc",
-    line => "source ~/.zshrc.d/*",
-    require => File["$home/.zshrc.d"],
+    path    => "$home/.zshrc",
+    line    => "source ~/.zshrc.d/*",
   }
 }

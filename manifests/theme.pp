@@ -1,24 +1,17 @@
 define ohmyzsh::theme(
   $theme = 'clean',
-  $user = $name
+  $user  = $name,
+  $home,
 ) {
-  if $user == 'root' {
-    $home = '/root'
-  } else {
-    $home = "${ohmyzsh::params::home}/${user}"
-  }
-
   if $theme == 'codeaddict' {
     file { "$home/.oh-my-zsh/custom/themes":
       ensure => directory,
-      owner => $user,
-    }
-
+      owner  => $user,
+    } ->
     file { "$home/.oh-my-zsh/custom/themes/codeaddict.zsh-theme":
-      ensure => present,
-      owner => $user,
-      source => 'puppet:///modules/ohmyzsh/codeaddict.zsh-theme',
-      require => File["$home/.oh-my-zsh/custom/themes"],
+      ensure  => present,
+      owner   => $user,
+      source  => 'puppet:///modules/ohmyzsh/codeaddict.zsh-theme',
     }
   }
 
