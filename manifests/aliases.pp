@@ -6,13 +6,13 @@ define ohmyzsh::aliases(
 
   $map.each |$alias, $command| {
     create_resources('ohmyzsh::alias', {
-      "${user}-${alias}": {
+      "${user}-${alias}" => {
         alias   => $alias,
         command => $command,
         user    => $user,
         home    => $home,
-      })
-    }
+      }
+    })
   }
 
 }
