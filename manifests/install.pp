@@ -32,39 +32,39 @@ define ohmyzsh::install(
   $home,
 ) {
 
-  exec { "ohmyzsh::git clone ${name}":
+  exec { "ohmyzsh::git clone ${user}":
     creates => "${home}/.oh-my-zsh",
     command => "/usr/bin/git clone git://github.com/robbyrussell/oh-my-zsh.git ${home}/.oh-my-zsh",
     user    => $user,
     require => [Package['git'], Package['zsh']]
   } ->
-  exec { "ohmyzsh::cp .zshrc ${name}":
+  exec { "ohmyzsh::cp .zshrc ${user}":
     creates => "${home}/.zshrc",
     command => "/bin/cp ${home}/.oh-my-zsh/templates/zshrc.zsh-template ${home}/.zshrc",
-    user    => $name,
+    user    => $user,
   }
 
-  if ! defined(User[$name]) {
-    user { "ohmyzsh::user ${name}":
+  if ! defined(User[$user]) {
+    user { "ohmyzsh::user ${user}":
       ensure     => present,
-      name       => $name,
+      name       => $user,
       managehome => true,
       shell      => $ohmyzsh::params::zsh,
       require    => Package['zsh'],
     }
   } else {
-    User <| title == $name |> {
+    User <| title == $user |> {
       shell => $ohmyzsh::params::zsh
     }
   }
 
   file { "$home/.zshrc.d":
-    owner  => $name,
-    group  => $name,
+    owner  => $user,
+    group  => $user,
     mode   => '0755',
     ensure => directory,
   } ->
-  file_line { "$name-source-zshrc.d":
+  file_line { "${user}-source-zshrc.d":
     path    => "$home/.zshrc",
     line    => "source ~/.zshrc.d/*",
   }
