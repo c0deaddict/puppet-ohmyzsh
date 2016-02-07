@@ -16,7 +16,7 @@ define ohmyzsh::warp(
   }
 
   $expanded_target = regsubst($target, '^~', $home)
-  file_line { "${user}-zsh-warp-${alias}":
+  file_line { "$user-zsh-warp-$alias":
     ensure  => $ensure,
     path    => $warprc,
     line    => "${alias}:${expanded_target}",

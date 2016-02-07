@@ -30,9 +30,9 @@ define ohmyzsh::upgrade(
   $home,
 ) {
 
-  exec { "ohmyzsh::git upgrade ${name}":
+  exec { "ohmyzsh-git-upgrade-$user":
     command => '/usr/bin/git pull --rebase --stat origin master',
-    cwd     => "${home}/.oh-my-zsh",
+    cwd     => "$home/.oh-my-zsh",
     user    => $user,
     require => Ohmyzsh::Install[$user],
   }

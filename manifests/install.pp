@@ -20,7 +20,7 @@
 # === Authors
 #
 # Leon Brocard <acme@astray.com>
-# Jos van Bakel <josvanbakel@gmail.com>
+# Jos van Bakel <jos@codeaddict.org>
 #
 # === Copyright
 #
@@ -28,36 +28,40 @@
 # Copyright 2015 Jos van Bakel
 #
 define ohmyzsh::install(
-  $user = $name,
   $home,
+  $theme,
+  $user                = $name,
+  $plugins             = ['git'],
+  $env                 = {},
+  $opts                = {},
+  $aliases             = {},
+  $warps               = {},
+  $git_repo            = $ohmyzsh::git_repo,
+  $update_zsh_days     = $ohmyzsh::update_zsh_days,
+  $hist_stamps         = $ohmyzsh::hist_stamps,'yyyy-mm-dd',
+  $case_sensitive      = $ohmyzsh::case_sensitive,
+  $disable_auto_update = $ohmyzsh::disable_auto_update,
 ) {
 
   include ohmyzsh
 
-  exec { "ohmyzsh::git clone ${user}":
-    creates => "${home}/.oh-my-zsh",
-    command => "/usr/bin/git clone git://github.com/robbyrussell/oh-my-zsh.git ${home}/.oh-my-zsh",
-    user    => $user,
-    require => [Package['git'], Package['zsh']]
-  } ->
-  exec { "ohmyzsh::cp .zshrc ${user}":
-    creates => "${home}/.zshrc",
-    command => "/bin/cp ${home}/.oh-my-zsh/templates/zshrc.zsh-template ${home}/.zshrc",
-    user    => $user,
+  if ! defined(User[$user]) {
+    fail("User $user is not defined");
   }
 
-  if ! defined(User[$user]) {
-    user { "ohmyzsh::user ${user}":
-      ensure     => present,
-      name       => $user,
-      managehome => true,
-      shell      => $ohmyzsh::params::zsh,
-      require    => Package['zsh'],
-    }
-  } else {
-    User <| title == $user |> {
-      shell => $ohmyzsh::params::zsh
-    }
+  User <| title == $user |> {
+    shell => $ohmyzsh::zsh_bin
+  }
+
+  exec { "ohmyzsh-git-clone-$user":
+    creates => "$home/.oh-my-zsh",
+    command => "/usr/bin/git clone $git_repo $home/.oh-my-zsh",
+    user    => $user,
+    require => Class['ohmyzsh'],
+  } ->
+  file { "$home/.oh-my-zsh/custom/themes":
+    ensure => directory,
+    owner  => $user,
   }
 
   file { "$home/.zshrc.d":
@@ -65,9 +69,41 @@ define ohmyzsh::install(
     group  => $user,
     mode   => '0755',
     ensure => directory,
-  } ->
-  file_line { "${user}-source-zshrc.d":
-    path    => "$home/.zshrc",
-    line    => "source ~/.zshrc.d/*",
   }
+
+  $plugins_joined = join($plugins, ' ')
+
+  plugins=(<%= @plugins_joined %>)
+
+  file { "$home/.zshrc":
+    ensure  => file,
+    owner   => $user,
+    group   => $user,
+    mode    => '0644',
+    content => template('ohmyzsh/zshrc.erb'),
+  }
+
+  $aliases.each |$alias, $command| {
+    create_resources('ohmyzsh::alias', {
+      "${user}-${alias}" => {
+        alias   => $alias,
+        command => $command,
+        user    => $user,
+        home    => $home,
+      }
+    })
+  }
+
+  $warps.each |$alias, $target| {
+    create_resources('ohmyzsh::warp', {
+      "${user}-${alias}" => {
+        alias   => $alias,
+        target  => $target,
+        user    => $user,
+        home    => $home,
+        require => Ohmyzsh::Install[$user],
+      }
+    })
+  }
+
 }
