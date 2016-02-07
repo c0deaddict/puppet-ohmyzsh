@@ -38,7 +38,7 @@ define ohmyzsh::install(
   $warps               = {},
   $git_repo            = $ohmyzsh::git_repo,
   $update_zsh_days     = $ohmyzsh::update_zsh_days,
-  $hist_stamps         = $ohmyzsh::hist_stamps,'yyyy-mm-dd',
+  $hist_stamps         = $ohmyzsh::hist_stamps,,
   $case_sensitive      = $ohmyzsh::case_sensitive,
   $disable_auto_update = $ohmyzsh::disable_auto_update,
 ) {
