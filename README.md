@@ -27,7 +27,7 @@ This module is called ohmyzsh as Puppet does not support hyphens in module names
 ohmyzsh::install { 'jos':
   home    => '/home/jos',
   theme   => 'clean',
-  plugins => ['git', 'docker'],
+  plugins => ['wd', 'git', 'docker'],
   env     => {
     'EDITOR' => 'vim',
   },
