@@ -36,19 +36,15 @@ define ohmyzsh::install(
   $opts                = {},
   $aliases             = {},
   $warps               = {},
-  $git_repo            = $ohmyzsh::git_repo,
-  $update_zsh_days     = $ohmyzsh::update_zsh_days,
-  $hist_stamps         = $ohmyzsh::hist_stamps,,
-  $case_sensitive      = $ohmyzsh::case_sensitive,
-  $disable_auto_update = $ohmyzsh::disable_auto_update,
+  $config              = {},
 ) {
-
-  notify { "ohmyzsh::install is being installed on $user": }
 
   include ohmyzsh
 
+  $actual_config = merge($ohmyzsh::default_config, $config)
+
   if ! defined(User[$user]) {
-    fail("User $user is not defined");
+    fail("User $user is not defined")
   }
 
   User <| title == $user |> {
@@ -57,7 +53,7 @@ define ohmyzsh::install(
 
   exec { "ohmyzsh-git-clone-$user":
     creates => "$home/.oh-my-zsh",
-    command => "/usr/bin/git clone $git_repo $home/.oh-my-zsh",
+    command => "/usr/bin/git clone ${ohmyzsh::git_repo} $home/.oh-my-zsh",
     user    => $user,
     require => Class['ohmyzsh'],
   } ->
@@ -75,8 +71,6 @@ define ohmyzsh::install(
 
   $plugins_joined = join($plugins, ' ')
 
-  plugins=(<%= @plugins_joined %>)
-
   file { "$home/.zshrc":
     ensure  => file,
     owner   => $user,
@@ -85,25 +79,24 @@ define ohmyzsh::install(
     content => template('ohmyzsh/zshrc.erb'),
   }
 
-  $aliases.each |$alias, $command| {
+  $aliases.each |$short, $command| {
     create_resources('ohmyzsh::alias', {
-      "${user}-${alias}" => {
-        alias   => $alias,
-        command => $command,
-        user    => $user,
-        home    => $home,
+      "${user}-${short}" => {
+        resource_name => $short,
+        command       => $command,
+        user          => $user,
+        home          => $home,
       }
     })
   }
 
-  $warps.each |$alias, $target| {
+  $warps.each |$short, $target| {
     create_resources('ohmyzsh::warp', {
-      "${user}-${alias}" => {
-        alias   => $alias,
-        target  => $target,
-        user    => $user,
-        home    => $home,
-        require => Ohmyzsh::Install[$user],
+      "${user}-${short}" => {
+        resource_name => $short,
+        target        => $target,
+        user          => $user,
+        home          => $home,
       }
     })
   }

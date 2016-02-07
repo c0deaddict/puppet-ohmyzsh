@@ -1,13 +1,13 @@
 define ohmyzsh::theme(
-  $ensure  = present,
-  $theme   = $name,
+  $ensure  = file,
   $source  = undef,
   $content = undef,
   $user,
   $home,
+  $resource_name,
 ) {
 
-  file { "$home/.oh-my-zsh/custom/themes/$theme.zsh-theme":
+  file { "$home/.oh-my-zsh/custom/themes/${resource_name}.zsh-theme":
     ensure  => $ensure,
     owner   => $user,
     source  => $source,
