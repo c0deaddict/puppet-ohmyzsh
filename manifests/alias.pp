@@ -20,7 +20,7 @@ define ohmyzsh::alias(
     path    => $aliases_file,
     line    => "alias ${resource_name}=\"${command}\"",
     match   => "^alias ${resource_name}=",
-    require => [Ohmyzsh::Install[$user], File[$aliases_file]],
+    require => File[$aliases_file],
   }
 
 }
