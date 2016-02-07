@@ -33,12 +33,9 @@
 # Copyright 2013 Leon Brocard
 #
 class ohmyzsh(
-  $zsh_bin             = $ohmyzsh::params::zsh,
-  $git_repo            = $ohmyzsh::params::git_repo,
-  $update_zsh_days     = $ohmyzsh::params::update_zsh_days,
-  $hist_stamps         = $ohmyzsh::params::hist_stamps,
-  $case_sensitive      = $ohmyzsh::params::case_sensitive,
-  $disable_auto_update = $ohmyzsh::params::disable_auto_update,
+  $zsh_bin         = $ohmyzsh::params::zsh,
+  $git_repo        = $ohmyzsh::params::git_repo,
+  $default_config  = $ohmyzsh::params::default_config,
 ) inherits ohmyzsh::params {
 
   if ! defined(Package['git']) {

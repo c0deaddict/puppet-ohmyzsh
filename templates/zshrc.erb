@@ -5,9 +5,10 @@
 export ZSH=<%= @home %>/.oh-my-zsh
 
 ZSH_THEME="<%= @theme %>"
-DISABLE_AUTO_UPDATE="<%= @disable_auto_update %>"
-export UPDATE_ZSH_DAYS=<%= @update_zsh_days %>
-HIST_STAMPS="<%= @hist_stamps %>"
+<% @actual_config.each do |k, v| -%>
+<% if k == 'UPDATE_ZSH_DAYS' %>export <% end %><%= k %>="<%= v %>"
+<% end -%>
+
 plugins=(<%= @plugins_joined %>)
 
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
@@ -16,10 +17,10 @@ source $ZSH/oh-my-zsh.sh
 
 <% @opts.each do |v| -%>
 setopt <%= v %>
-<% end %>
+<% end -%>
 
 <% @env.each do |k, v| -%>
 export <%= k %>="<%= v %>"
-<% end %>
+<% end -%>
 
 source ~/.zshrc.d/*

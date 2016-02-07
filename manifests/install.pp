@@ -36,14 +36,12 @@ define ohmyzsh::install(
   $opts                = {},
   $aliases             = {},
   $warps               = {},
-  $git_repo            = $ohmyzsh::git_repo,
-  $update_zsh_days     = $ohmyzsh::update_zsh_days,
-  $hist_stamps         = $ohmyzsh::hist_stamps,
-  $case_sensitive      = $ohmyzsh::case_sensitive,
-  $disable_auto_update = $ohmyzsh::disable_auto_update,
+  $config              = {},
 ) {
 
   include ohmyzsh
+
+  $actual_config = merge($ohmyzsh::default_config, $config)
 
   if ! defined(User[$user]) {
     fail("User $user is not defined")
@@ -55,7 +53,7 @@ define ohmyzsh::install(
 
   exec { "ohmyzsh-git-clone-$user":
     creates => "$home/.oh-my-zsh",
-    command => "/usr/bin/git clone $git_repo $home/.oh-my-zsh",
+    command => "/usr/bin/git clone ${ohmyzsh::git_repo} $home/.oh-my-zsh",
     user    => $user,
     require => Class['ohmyzsh'],
   } ->
