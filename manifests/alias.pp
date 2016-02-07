@@ -2,9 +2,8 @@ define ohmyzsh::alias(
   $command,
   $user,
   $home,
-  $ensure        = present,
-  $alias         = $resource_name,
-  $resource_name = undef,
+  $resource_name,
+  $ensure = present,
 ) {
 
   $aliases_file = "$home/.zshrc.d/aliases.sh"
@@ -16,11 +15,11 @@ define ohmyzsh::alias(
     }
   }
 
-  file_line { "$user-zsh-alias-$alias":
+  file_line { "$user-zsh-alias-$resource_name":
     ensure  => $ensure,
     path    => $aliases_file,
-    line    => "alias ${alias}=\"${command}\"",
-    match   => "^alias ${alias}=",
+    line    => "alias ${resource_name}=\"${command}\"",
+    match   => "^alias ${resource_name}=",
     require => [Ohmyzsh::Install[$user], File[$aliases_file]],
   }
 

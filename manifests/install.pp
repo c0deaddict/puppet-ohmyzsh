@@ -43,6 +43,8 @@ define ohmyzsh::install(
   $disable_auto_update = $ohmyzsh::disable_auto_update,
 ) {
 
+  notify { "ohmyzsh::install is being installed on $user": }
+
   include ohmyzsh
 
   if ! defined(User[$user]) {
