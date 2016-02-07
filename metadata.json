@@ -4,8 +4,8 @@
   "author": "acme, c0deaddict",
   "license": "Apache-2.0",
   "summary": "ohmyzsh module",
-  "source": "https://github.com/c0deaddict/puppet-acme-oh-my-zsh",
-  "project_page": "https://github.com/c0deaddict/puppet-acme-oh-my-zsh",
+  "source": "https://github.com/c0deaddict/puppet-ohmyzsh",
+  "project_page": "https://github.com/c0deaddict/puppet-ohmyzsh",
   "tags": ["zsh"],
   "operatingsystem_support": [
     {
